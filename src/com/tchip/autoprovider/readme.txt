@@ -26,18 +26,3 @@ set_detect_crash_state	0,1		Åö×²Õì²â¿ª¹Ø
 set_detect_crash_level	1,2,3	Åö×²Õì²âÁéÃô¶È(µÍ,ÖÐ,¸ß)
 set_park_monitor_state	0,1		Í£³µÊØÎÀ¿ª¹Ø
 --------------------------------------------
-			Uri uri = Uri.parse("content://com.tchip.provider.AutoProvider/state/name/"
-							+ name);
-			ContentResolver resolve = context.getContentResolver();
-			Cursor cursor = resolve.query(uri, null, null, null, null);
-			if (cursor.getCount() > 0) {
-				cursor.moveToFirst();
-				videoLock = cursor.getInt(cursor.getColumnIndex("lock"));
-				cursor.close();
-			} else {
-				videoLock = 0;
-			}
-
-			if (1 == videoLock) {
-				isFileLock = true;
-			}

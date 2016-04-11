@@ -43,7 +43,7 @@ public class AutoProvider extends ContentProvider {
 					nameWhere, selectionArgs, null, null, sortOrder);
 
 		default:
-			throw new IllegalArgumentException("Unkwon Uri:" + uri.toString());
+			throw new IllegalArgumentException("Unknown Uri:" + uri.toString());
 		}
 	}
 
@@ -55,12 +55,20 @@ public class AutoProvider extends ContentProvider {
 			return uri;
 
 		case STATE:
-			long id = db.insert(AutoStateDbHelper.TABLE_STATE, null, values);
-			getContext().getContentResolver().notifyChange(uri, null);
-			return ContentUris.withAppendedId(uri, id);
+			String name = values.getAsString("name");
+			String value = values.getAsString("value");
+			if (name != null && name.trim().length() > 0 && value != null
+					&& value.trim().length() > 0) {
+				long id = db
+						.insert(AutoStateDbHelper.TABLE_STATE, null, values);
+				getContext().getContentResolver().notifyChange(uri, null);
+				return ContentUris.withAppendedId(uri, id);
+			} else {
+				return uri;
+			}
 
 		default:
-			throw new IllegalArgumentException("Unkwon Uri:" + uri.toString());
+			throw new IllegalArgumentException("Unknown Uri:" + uri.toString());
 		}
 	}
 
@@ -75,17 +83,19 @@ public class AutoProvider extends ContentProvider {
 		SQLiteDatabase db = autoStateDbHelper.getReadableDatabase();
 		switch (VIDEO_MATCHER.match(uri)) {
 		case STATE_NAME:
-			int count = db.update(AutoStateDbHelper.TABLE_STATE, values, selection, selectionArgs);
+			int count = db.update(AutoStateDbHelper.TABLE_STATE, values,
+					selection, selectionArgs);
 			getContext().getContentResolver().notifyChange(uri, null);
 			return count;
 
 		case STATE:
-//			int count = db.update(AutoStateDbHelper.TABLE_STATE, values, selection, selectionArgs);
-//			getContext().getContentResolver().notifyChange(uri, null);
+			// int count = db.update(AutoStateDbHelper.TABLE_STATE, values,
+			// selection, selectionArgs);
+			// getContext().getContentResolver().notifyChange(uri, null);
 			return 0;
 
 		default:
-			throw new IllegalArgumentException("Unkwon Uri:" + uri.toString());
+			throw new IllegalArgumentException("Unknown Uri:" + uri.toString());
 		}
 	}
 
