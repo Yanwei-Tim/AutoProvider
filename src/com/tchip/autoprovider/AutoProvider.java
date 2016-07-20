@@ -7,6 +7,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
 public class AutoProvider extends ContentProvider {
 
@@ -83,10 +84,14 @@ public class AutoProvider extends ContentProvider {
 		SQLiteDatabase db = autoStateDbHelper.getReadableDatabase();
 		switch (VIDEO_MATCHER.match(uri)) {
 		case STATE_NAME:
-			int count = db.update(AutoStateDbHelper.TABLE_STATE, values,
-					selection, selectionArgs);
-			getContext().getContentResolver().notifyChange(uri, null);
-			return count;
+			try {
+				int count = db.update(AutoStateDbHelper.TABLE_STATE, values,
+						selection, selectionArgs);
+				getContext().getContentResolver().notifyChange(uri, null);
+				return count;
+			} catch (Exception e) {
+				return 0;
+			}
 
 		case STATE:
 			// int count = db.update(AutoStateDbHelper.TABLE_STATE, values,
